@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pateq – Premium Electronics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080a0e;
+      --surface: #0f1218;
+      --surface2: #161b24;
+      --border: #1e2530;
+      --accent: #e8ff47;
+      --accent2: #47c8ff;
+      --text: #e8edf5;
+      --muted: #5a6478;
+      --heading: 'JetBrains Mono', cursive;
+      --body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); overflow-x: hidden; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      background: rgba(8,10,14,.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--heading); font-size: 1.4rem; letter-spacing: .12em;
+      color: var(--accent); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: .85rem; font-weight: 500; letter-spacing: .08em;
+      color: var(--muted); text-decoration: none; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #080a0e;
+      font-family: var(--body); font-weight: 600; font-size: .82rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .55rem 1.4rem; border: none; cursor: pointer;
+      text-decoration: none; transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: #d4e83a; transform: translateY(-1px); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); transition: all .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      flex-direction: column; padding: 1.5rem 5%; gap: 1.2rem; z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: .95rem; font-weight: 500; letter-spacing: .06em;
+      color: var(--muted); text-decoration: none; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 0 5%;
+      padding-top: 68px; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(72,200,255,.06) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 50% at 30% 80%, rgba(232,255,71,.04) 0%, transparent 60%);
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(30,37,48,.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,37,48,.35) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      font-size: .78rem; font-weight: 500; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--accent2);
+      display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent2); }
+    .hero-title {
+      font-family: var(--heading); font-size: clamp(3.5rem, 7vw, 6.5rem);
+      line-height: .95; letter-spacing: .03em; color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    .hero-title span { color: var(--accent); display: block; }
+    .hero-desc { font-size: 1rem; line-height: 1.7; color: var(--muted); max-width: 420px; margin-bottom: 2.4rem; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #080a0e;
+      font-weight: 700; font-size: .88rem; letter-spacing: .1em;
+      text-transform: uppercase; padding: .85rem 2rem;
+      text-decoration: none; display: inline-block;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: #d4e83a; transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid var(--border); color: var(--text);
+      font-weight: 500; font-size: .88rem; letter-spacing: .1em;
+      text-transform: uppercase; padding: .85rem 2rem;
+      text-decoration: none; display: inline-block;
+      transition: border-color .2s, color .2s, transform .15s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .hero-visual {
+      position: relative; z-index: 2;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-device {
+      width: min(420px, 90%);
+      aspect-ratio: 1;
+      position: relative;
+    }
+    .device-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid;
+      animation: spin linear infinite;
+    }
+    .ring1 { inset: 0; border-color: rgba(232,255,71,.15); animation-duration: 20s; }
+    .ring2 { inset: 10%; border-color: rgba(72,200,255,.12); animation-duration: 15s; animation-direction: reverse; }
+    .ring3 { inset: 22%; border-color: rgba(232,255,71,.08); animation-duration: 25s; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .device-core {
+      position: absolute; inset: 30%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--heading); font-size: 2.4rem;
+      color: var(--accent); letter-spacing: .1em;
+      box-shadow: 0 0 60px rgba(232,255,71,.12), inset 0 0 30px rgba(0,0,0,.5);
+    }
+    .hero-stats {
+      position: absolute; bottom: -1rem; left: -2rem;
+      display: flex; gap: 1.5rem;
+    }
+    .stat-box {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: .9rem 1.2rem;
+    }
+    .stat-box .num { font-family: var(--heading); font-size: 1.8rem; color: var(--accent); }
+    .stat-box .lbl { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--accent); color: #080a0e;
+      padding: .6rem 0; overflow: hidden; white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-flex; gap: 0;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-item {
+      font-family: var(--heading); font-size: 1.05rem; letter-spacing: .12em;
+      padding: 0 2.5rem;
+    }
+    .ticker-sep { opacity: .4; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── SECTION BASE ── */
+    section { padding: 6rem 5%; }
+    .section-label {
+      font-size: .75rem; font-weight: 500; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: var(--heading); font-size: clamp(2.4rem, 5vw, 3.8rem);
+      line-height: 1; letter-spacing: .04em; margin-bottom: 1rem;
+    }
+    .section-sub { font-size: 1rem; color: var(--muted); max-width: 500px; line-height: 1.65; margin-bottom: 3rem; }
+
+    /* ── CATEGORIES ── */
+    .categories { background: var(--surface); }
+    .cat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+    }
+    .cat-card {
+      background: var(--surface2); padding: 2rem 1.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: .8rem;
+      text-decoration: none; color: var(--text); text-align: center;
+      transition: background .2s;
+      position: relative; overflow: hidden;
+    }
+    .cat-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent); transform: scaleX(0);
+      transition: transform .3s;
+    }
+    .cat-card:hover { background: #1a2030; }
+    .cat-card:hover::after { transform: scaleX(1); }
+    .cat-icon { font-size: 2.2rem; }
+    .cat-name { font-size: .82rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+    .cat-count { font-size: .72rem; color: var(--muted); }
+
+    /* ── FEATURED PRODUCTS ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+    }
+    .product-card {
+      background: var(--surface); padding: 0;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      transition: background .2s;
+    }
+    .product-card:hover { background: var(--surface2); }
+    .product-badge {
+      position: absolute; top: 1rem; left: 1rem; z-index: 2;
+      background: var(--accent); color: #080a0e;
+      font-size: .65rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; padding: .25rem .6rem;
+    }
+    .product-img {
+      width: 100%; aspect-ratio: 4/3; background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .product-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(72,200,255,.06), transparent);
+    }
+    .product-body { padding: 1.4rem 1.4rem 1.8rem; flex: 1; display: flex; flex-direction: column; gap: .5rem; }
+    .product-brand { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent2); }
+    .product-name { font-weight: 600; font-size: 1rem; }
+    .product-spec { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: .8rem; }
+    .product-price { font-family: var(--heading); font-size: 1.6rem; color: var(--accent); letter-spacing: .06em; }
+    .product-old { font-size: .78rem; color: var(--muted); text-decoration: line-through; margin-left: .4rem; }
+    .btn-cart {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text); font-size: .75rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .5rem 1rem; cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+      text-decoration: none;
+    }
+    .btn-cart:hover { background: var(--accent); border-color: var(--accent); color: #080a0e; }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      margin: 0 5%; border: 1px solid var(--border);
+      background: var(--surface2);
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 2rem;
+      padding: 3rem 3.5rem;
+      position: relative; overflow: hidden;
+    }
+    .promo-banner::before {
+      content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+      width: 40%; background: radial-gradient(ellipse at right, rgba(232,255,71,.07), transparent 70%);
+    }
+    .promo-tag { font-size: .72rem; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; margin-bottom: .6rem; }
+    .promo-title { font-family: var(--heading); font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1; margin-bottom: .8rem; }
+    .promo-desc { color: var(--muted); font-size: .92rem; max-width: 440px; }
+    .promo-cta { flex-shrink: 0; }
+
+    /* ── WHY US ── */
+    .why { background: var(--surface); }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+    .why-card {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      position: relative;
+    }
+    .why-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+    }
+    .why-num { font-family: var(--heading); font-size: 3.5rem; color: rgba(232,255,71,.1); line-height: 1; margin-bottom: .8rem; }
+    .why-ttl { font-weight: 600; font-size: .95rem; margin-bottom: .5rem; }
+    .why-txt { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── NEWSLETTER ── */
+    .newsletter { text-align: center; }
+    .newsletter-box {
+      max-width: 600px; margin: 0 auto;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 3.5rem;
+    }
+    .nl-form { display: flex; gap: 0; margin-top: 2rem; }
+    .nl-input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border);
+      border-right: none; color: var(--text); font-family: var(--body);
+      font-size: .9rem; padding: .85rem 1.2rem; outline: none;
+      transition: border-color .2s;
+    }
+    .nl-input::placeholder { color: var(--muted); }
+    .nl-input:focus { border-color: var(--accent); }
+    .nl-btn {
+      background: var(--accent); color: #080a0e;
+      border: none; font-family: var(--body); font-weight: 700;
+      font-size: .82rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .85rem 1.8rem; cursor: pointer;
+      transition: background .2s;
+    }
+    .nl-btn:hover { background: #d4e83a; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 4rem 5% 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand .nav-logo { font-size: 2.2rem; display: inline-block; margin-bottom: 1rem; }
+    .footer-brand p { font-size: .88rem; color: var(--muted); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 {
+      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .footer-col a { font-size: .88rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .8rem; color: var(--muted); flex-wrap: wrap; gap: .8rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 100px; text-align: center; }
+      .hero-eyebrow { justify-content: center; }
+      .hero-desc { max-width: 100%; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { margin-top: 3rem; }
+      .hero-stats { left: 50%; transform: translateX(-50%); bottom: -3rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .promo-banner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero-stats { flex-wrap: wrap; justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .promo-banner { padding: 2rem; }
+      .nl-form { flex-direction: column; }
+      .nl-input { border-right: 1px solid var(--border); border-bottom: none; }
+      section { padding: 4rem 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">PATEQ</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="products.html" class="nav-cta">Shop Now</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="products.html" class="nav-cta" style="display:inline-block;margin-top:.4rem;">Shop Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">New Arrivals 2025</div>
+    <h1 class="hero-title">
+      Next-Level<br>
+      <span>Tech Starts</span>
+      Here.
+    </h1>
+    <p class="hero-desc">Premium electronics engineered for performance, built for the future. Explore devices that redefine what's possible.</p>
+    <div class="hero-btns">
+      <a href="products.html" class="btn-primary">Explore Products</a>
+      <a href="about.html" class="btn-outline">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-device">
+      <div class="device-ring ring1"></div>
+      <div class="device-ring ring2"></div>
+      <div class="device-ring ring3"></div>
+      <div class="device-core">PTQ</div>
+      <div class="hero-stats">
+        <div class="stat-box"><div class="num">2K+</div><div class="lbl">Products</div></div>
+        <div class="stat-box"><div class="num">98%</div><div class="lbl">Satisfaction</div></div>
+        <div class="stat-box"><div class="num">50+</div><div class="lbl">Brands</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Smartphones</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Laptops</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Audio</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Smart Home</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Cameras</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Wearables</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Gaming</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Tablets</span><span class="ticker-item ticker-sep">✦</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">Smartphones</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Laptops</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Audio</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Smart Home</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Cameras</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Wearables</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Gaming</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Tablets</span><span class="ticker-item ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="section-label">Browse by category</div>
+  <h2 class="section-title">What are you looking for?</h2>
+  <div class="cat-grid">
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">📱</div>
+      <div class="cat-name">Smartphones</div>
+      <div class="cat-count">340 items</div>
+    </a>
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">💻</div>
+      <div class="cat-name">Laptops</div>
+      <div class="cat-count">215 items</div>
+    </a>
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">🎧</div>
+      <div class="cat-name">Audio</div>
+      <div class="cat-count">180 items</div>
+    </a>
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">📷</div>
+      <div class="cat-name">Cameras</div>
+      <div class="cat-count">95 items</div>
+    </a>
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">⌚</div>
+      <div class="cat-name">Wearables</div>
+      <div class="cat-count">130 items</div>
+    </a>
+    <a href="products.html" class="cat-card">
+      <div class="cat-icon">🎮</div>
+      <div class="cat-name">Gaming</div>
+      <div class="cat-count">220 items</div>
+    </a>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section>
+  <div class="section-label">Hand-picked for you</div>
+  <h2 class="section-title">Featured Products</h2>
+  <p class="section-sub">Our editors' top picks — cutting-edge devices at unbeatable value.</p>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-badge">New</div>
+      <div class="product-img">📱</div>
+      <div class="product-body">
+        <div class="product-brand">Samsung</div>
+        <div class="product-name">Galaxy S25 Ultra</div>
+        <div class="product-spec">200MP · 12GB RAM · 256GB · 5G</div>
+        <div class="product-footer">
+          <div><span class="product-price">$1,199</span></div>
+          <a href="products.html" class="btn-cart">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-badge" style="background:var(--accent2);color:#080a0e;">Sale</div>
+      <div class="product-img">💻</div>
+      <div class="product-body">
+        <div class="product-brand">Apple</div>
+        <div class="product-name">MacBook Pro 14"</div>
+        <div class="product-spec">M4 Pro · 18GB RAM · 512GB SSD</div>
+        <div class="product-footer">
+          <div><span class="product-price">$1,799</span><span class="product-old">$1,999</span></div>
+          <a href="products.html" class="btn-cart">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🎧</div>
+      <div class="product-body">
+        <div class="product-brand">Sony</div>
+        <div class="product-name">WH-1000XM6</div>
+        <div class="product-spec">ANC · 40hr Battery · Hi-Res Audio</div>
+        <div class="product-footer">
+          <div><span class="product-price">$349</span></div>
+          <a href="products.html" class="btn-cart">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-badge">Hot</div>
+      <div class="product-img">⌚</div>
+      <div class="product-body">
+        <div class="product-brand">Apple</div>
+        <div class="product-name">Watch Ultra 3</div>
+        <div class="product-spec">49mm · Titanium · GPS + LTE</div>
+        <div class="product-footer">
+          <div><span class="product-price">$799</span></div>
+          <a href="products.html" class="btn-cart">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div>
+    <div class="promo-tag">Limited Time Offer</div>
+    <div class="promo-title">Up to 40% off<br>Gaming Gear</div>
+    <p class="promo-desc">Level up your setup without emptying your wallet. Deals on controllers, headsets, and more — this weekend only.</p>
+  </div>
+  <div class="promo-cta">
+    <a href="products.html" class="btn-primary">Shop the Sale</a>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section class="why">
+  <div class="section-label">Why Pateq</div>
+  <h2 class="section-title">Built Different</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-ttl">Genuine Products Only</div>
+      <div class="why-txt">Every device is 100% authentic, sourced directly from manufacturers and certified distributors.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-ttl">Expert Support 24/7</div>
+      <div class="why-txt">Our tech specialists are on call around the clock to help you choose, set up, and troubleshoot.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-ttl">Fast, Free Delivery</div>
+      <div class="why-txt">Free same-day delivery on orders over $99. Express options available for urgent needs.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-ttl">30-Day Returns</div>
+      <div class="why-txt">Changed your mind? No problem. Easy, hassle-free returns within 30 days of purchase.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-box">
+    <div class="section-label" style="text-align:center">Stay ahead</div>
+    <h2 class="section-title" style="font-size:2.4rem">Get deals before<br>anyone else.</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-top:.8rem;">Subscribe for exclusive offers, new arrivals, and tech insights. No spam — ever.</p>
+    <form class="nl-form" onsubmit="return false;">
+      <input class="nl-input" type="email" placeholder="your@email.com" required />
+      <button class="nl-btn" type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">PATEQ</a>
+      <p>Premium electronics for every lifestyle. We bring the world's best technology directly to your hands.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="products.html">All Products</a></li>
+        <li><a href="products.html">Smartphones</a></li>
+        <li><a href="products.html">Laptops</a></li>
+        <li><a href="products.html">Audio</a></li>
+        <li><a href="products.html">Gaming</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">Careers</a></li>
+        <li><a href="about.html">Press</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="contact.html">Help Center</a></li>
+        <li><a href="contact.html">Returns</a></li>
+        <li><a href="contact.html">Warranty</a></li>
+        <li><a href="contact.html">Track Order</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Pateq Electronics. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Use</span>
+  </div>
+</footer>
+
+<script>
+  const ham = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+</script>
+</body>
+</html>
