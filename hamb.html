@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial;
+}
+
+/* NAVBAR */
+
+nav{
+    background:#222;
+    padding:15px 20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    position:relative;
+}
+
+.logo{
+    color:white;
+    font-size:24px;
+    font-weight:bold;
+}
+
+/* MENU */
+
+.menu{
+    display:flex;
+    gap:20px;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+}
+
+/* HIDE CHECKBOX */
+
+#check{
+    display:none;
+}
+
+/* HAMBURGER */
+
+.hamburger{
+    display:none;
+    font-size:30px;
+    color:white;
+    cursor:pointer;
+}
+
+/* MOBILE */
+
+@media (max-width:768px){
+
+    .hamburger{
+        display:block;
+    }
+
+    .menu{
+
+        position:absolute;
+        top:70px;
+        left:0;
+
+        background:#333;
+
+        width:100%;
+
+        flex-direction:column;
+
+        text-align:center;
+
+        display:none;
+    }
+
+    .menu a{
+        padding:15px;
+        border-top:1px solid #555;
+    }
+
+    /* WHEN CHECKBOX IS CHECKED */
+
+    #check:checked ~ .menu{
+        display:flex;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">Logo</div>
+
+    <!-- HIDDEN CHECKBOX -->
+    <input type="checkbox" id="check">
+
+    <!-- HAMBURGER -->
+    <label for="check" class="hamburger">
+        ☰
+    </label>
+
+    <!-- MENU -->
+    <div class="menu">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </div>
+
+</nav>
+
+</body>
+</html>

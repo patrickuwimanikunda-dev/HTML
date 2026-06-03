@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #check{
+            display: none;
+        }
+        .ham{
+            display: none;
+        }
+        .main div{
+            color: green;
+        }
+        @media (max-width = 768px){
+            .main{
+            display: none;
+        }
+             #check{
+            display: none;
+            #check:checked ~ .main{
+            display: flex;
+            flex-flow: column;
+        }
+        }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="ham">☰</label>
+        <div class="main">
+            <div>Class</div>
+            <div>Class</div>
+            <div>Class</div>
+        </div>
+    </nav>
+</body>
+</html>
