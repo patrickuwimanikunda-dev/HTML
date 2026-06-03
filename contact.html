@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact – Pateq Electronics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080a0e; --surface: #0f1218; --surface2: #161b24;
+      --border: #1e2530; --accent: #e8ff47; --accent2: #47c8ff;
+      --text: #e8edf5; --muted: #5a6478;
+      --heading: 'JetBrains Mono', cursive; --body: 'DM Sans', sans-serif;
+      --error: #ff5c5c; --success: #4cffb3;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 68px; background: rgba(8,10,14,.85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: var(--heading); font-size: 2rem; letter-spacing: .12em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a { font-size: .85rem; font-weight: 500; letter-spacing: .08em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-cta { background: var(--accent); color: #080a0e; font-family: var(--body); font-weight: 600; font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; padding: .55rem 1.4rem; border: none; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .nav-cta:hover { background: #d4e83a; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); transition: all .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 5%; gap: 1.2rem; z-index: 99; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: .95rem; font-weight: 500; letter-spacing: .06em; color: var(--muted); text-decoration: none; text-transform: uppercase; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    .page-header {
+      padding: 110px 5% 4rem; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .page-header::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 100% at 90% 50%, rgba(72,200,255,.05), transparent 65%); }
+    .breadcrumb { font-size: .72rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1rem; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .page-header h1 { font-family: var(--heading); font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .95; letter-spacing: .03em; position: relative; z-index: 2; }
+    .page-header h1 span { color: var(--accent); }
+    .page-header p { color: var(--muted); margin-top: .9rem; max-width: 460px; font-size: .97rem; line-height: 1.65; position: relative; z-index: 2; }
+
+    .info-strip {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      background: var(--accent); gap: 0;
+    }
+    .info-item {
+      padding: 1.4rem 2rem; border-right: 1px solid rgba(8,10,14,.15);
+      display: flex; align-items: center; gap: .9rem;
+    }
+    .info-item:last-child { border-right: none; }
+    .info-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .info-text { display: flex; flex-direction: column; }
+    .info-label { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(8,10,14,.55); font-weight: 600; }
+    .info-val { font-size: .9rem; font-weight: 700; color: #080a0e; }
+
+    .contact-area { padding: 5rem 5%; display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+
+    .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+    .section-label { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
+    .section-title { font-family: var(--heading); font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1; margin-bottom: .8rem; }
+    .contact-info > p { color: var(--muted); line-height: 1.7; font-size: .93rem; }
+
+    .contact-cards { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .contact-card { background: var(--surface); padding: 1.4rem 1.6rem; display: flex; align-items: flex-start; gap: 1rem; transition: background .2s; }
+    .contact-card:hover { background: var(--surface2); }
+    .cc-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: .1rem; }
+    .cc-label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent2); margin-bottom: .2rem; }
+    .cc-val { font-size: .92rem; font-weight: 500; }
+    .cc-sub { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+    .hours-box { background: var(--surface); border: 1px solid var(--border); padding: 1.6rem; }
+    .hours-box h4 { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .hours-row { display: flex; justify-content: space-between; font-size: .85rem; padding: .4rem 0; border-bottom: 1px solid var(--border); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--muted); }
+    .hours-row .time { color: var(--text); font-weight: 500; }
+
+    .form-panel { background: var(--surface); border: 1px solid var(--border); }
+    .form-tabs { display: flex; border-bottom: 1px solid var(--border); }
+    .tab-btn { flex: 1; padding: 1rem .5rem; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); font-family: var(--body); font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: color .2s, border-color .2s; }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(232,255,71,.03); }
+    .tab-btn:hover:not(.active) { color: var(--text); }
+
+    .tab-content { display: none; padding: 2.5rem; }
+    .tab-content.active { display: block; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.2rem; }
+    .form-group label { font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .form-group label .req { color: var(--accent); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--body); font-size: .9rem;
+      padding: .75rem 1rem; outline: none; width: 100%;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,255,71,.07); }
+    .form-input.error, .form-select.error, .form-textarea.error { border-color: var(--error); }
+    .error-msg { font-size: .72rem; color: var(--error); margin-top: -.2rem; display: none; }
+    .error-msg.visible { display: block; }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-select { cursor: pointer; }
+    .form-select option { background: var(--surface2); }
+
+    .char-count { font-size: .7rem; color: var(--muted); text-align: right; margin-top: -.8rem; margin-bottom: .8rem; }
+
+    .radio-group, .check-group { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .radio-pill input, .check-pill input { display: none; }
+    .radio-pill label, .check-pill label {
+      display: inline-flex; align-items: center;
+      border: 1px solid var(--border); padding: .45rem 1rem;
+      font-size: .8rem; color: var(--muted); cursor: pointer;
+      transition: all .2s;
+    }
+    .radio-pill input:checked + label, .check-pill input:checked + label { border-color: var(--accent); color: var(--accent); background: rgba(232,255,71,.05); }
+    .radio-pill label:hover, .check-pill label:hover { border-color: var(--muted); color: var(--text); }
+
+    .star-rating { display: flex; flex-direction: row-reverse; gap: .3rem; }
+    .star-rating input { display: none; }
+    .star-rating label { font-size: 1.6rem; color: var(--border); cursor: pointer; transition: color .15s; }
+    .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--accent); }
+
+    .file-upload {
+      border: 1px dashed var(--border); padding: 1.5rem;
+      text-align: center; cursor: pointer; transition: border-color .2s;
+      position: relative;
+    }
+    .file-upload:hover { border-color: var(--accent); }
+    .file-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .file-upload-icon { font-size: 1.8rem; margin-bottom: .5rem; }
+    .file-upload-text { font-size: .82rem; color: var(--muted); }
+    .file-upload-text span { color: var(--accent); }
+    .file-name { font-size: .78rem; color: var(--accent2); margin-top: .5rem; display: none; }
+
+    .range-slider { width: 100%; appearance: none; height: 3px; background: var(--border); outline: none; }
+    .range-slider::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+    .range-labels { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); margin-top: .4rem; }
+    .range-val { font-size: .88rem; font-weight: 700; color: var(--accent); }
+
+    .btn-submit {
+      width: 100%; background: var(--accent); color: #080a0e;
+      border: none; font-family: var(--body); font-weight: 700;
+      font-size: .9rem; letter-spacing: .12em; text-transform: uppercase;
+      padding: 1rem; cursor: pointer; margin-top: .5rem;
+      transition: background .2s, transform .15s;
+      position: relative; overflow: hidden;
+    }
+    .btn-submit:hover { background: #d4e83a; transform: translateY(-1px); }
+    .btn-submit:disabled { background: var(--muted); cursor: not-allowed; transform: none; }
+
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 300;
+      background: var(--success); color: #080a0e;
+      font-weight: 700; font-size: .88rem; letter-spacing: .08em;
+      padding: .9rem 1.8rem; transform: translateY(100px); opacity: 0;
+      transition: transform .3s, opacity .3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .map-section { padding: 0 5% 5rem; }
+    .map-box {
+      background: var(--surface); border: 1px solid var(--border);
+      height: 320px; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem; position: relative; overflow: hidden;
+    }
+    .map-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(rgba(30,37,48,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(30,37,48,.4) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .map-pin { font-size: 3rem; position: relative; z-index: 2; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .map-label { font-family: var(--heading); font-size: 1.4rem; letter-spacing: .1em; color: var(--text); position: relative; z-index: 2; }
+    .map-sub { font-size: .82rem; color: var(--muted); position: relative; z-index: 2; }
+
+    .faq-section { padding: 0 5% 5rem; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .faq-item { background: var(--surface); padding: 1.8rem; cursor: pointer; transition: background .2s; }
+    .faq-item:hover { background: var(--surface2); }
+    .faq-q { font-weight: 600; font-size: .92rem; display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+    .faq-q .toggle { color: var(--accent); font-size: 1.2rem; flex-shrink: 0; transition: transform .25s; }
+    .faq-item.open .faq-q .toggle { transform: rotate(45deg); }
+    .faq-a { font-size: .84rem; color: var(--muted); line-height: 1.65; max-height: 0; overflow: hidden; transition: max-height .3s ease, margin-top .25s; }
+    .faq-item.open .faq-a { max-height: 200px; margin-top: .8rem; }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 5% 1.5rem; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted); flex-wrap: wrap; gap: .8rem; }
+    .footer-logo { font-family: var(--heading); font-size: 1.6rem; color: var(--accent); text-decoration: none; }
+    .footer-links a { color: var(--muted); text-decoration: none; margin-left: 1.2rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 960px) { .contact-area { grid-template-columns: 1fr; gap: 2.5rem; } .faq-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .form-row { grid-template-columns: 1fr; } .tab-content { padding: 1.5rem; } .form-tabs { flex-wrap: wrap; } .info-strip { grid-template-columns: 1fr 1fr; } section, .contact-area, .map-section, .faq-section { padding-left: 4%; padding-right: 4%; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">PATEQ</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <a href="products.html" class="nav-cta">Shop Now</a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- SUCCESS TOAST -->
+<div class="toast" id="toast">✓ Message sent successfully!</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a> → Contact</div>
+  <h1>Let's <span>Talk</span><br>Tech.</h1>
+  <p>Questions, orders, support, or just want to say hi? We respond to every message within 24 hours.</p>
+</div>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item">
+    <div class="info-icon">📍</div>
+    <div class="info-text">
+      <span class="info-label">HQ Location</span>
+      <span class="info-val">San Francisco, CA</span>
+    </div>
+  </div>
+  <div class="info-item">
+    <div class="info-icon">📧</div>
+    <div class="info-text">
+      <span class="info-label">Email Us</span>
+      <span class="info-val">hello@pateq.com</span>
+    </div>
+  </div>
+  <div class="info-item">
+    <div class="info-icon">📞</div>
+    <div class="info-text">
+      <span class="info-label">Call Us</span>
+      <span class="info-val">+1 (800) PATEQ-01</span>
+    </div>
+  </div>
+  <div class="info-item">
+    <div class="info-icon">⏱️</div>
+    <div class="info-text">
+      <span class="info-label">Response Time</span>
+      <span class="info-val">Under 24 Hours</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT AREA -->
+<div class="contact-area">
+
+  <!-- LEFT: INFO -->
+  <div class="contact-info">
+    <div>
+      <div class="section-label">Reach out</div>
+      <h2 class="section-title">We're Here for You</h2>
+      <p>Whether you need product advice, post-purchase support, or want to discuss wholesale partnerships — our team is ready.</p>
+    </div>
+
+    <div class="contact-cards">
+      <div class="contact-card">
+        <div class="cc-icon">💬</div>
+        <div>
+          <div class="cc-label">Live Chat</div>
+          <div class="cc-val">Available Now</div>
+          <div class="cc-sub">Average response: 3 minutes</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">📧</div>
+        <div>
+          <div class="cc-label">Email Support</div>
+          <div class="cc-val">support@pateq.com</div>
+          <div class="cc-sub">Replies within 24 hours</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">📱</div>
+        <div>
+          <div class="cc-label">WhatsApp</div>
+          <div class="cc-val">+1 (415) 555-0100</div>
+          <div class="cc-sub">Mon–Sat, 9am–8pm PT</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">🏪</div>
+        <div>
+          <div class="cc-label">Visit a Store</div>
+          <div class="cc-val">3 Locations</div>
+          <div class="cc-sub">SF · New York · London</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hours-box">
+      <h4>Business Hours</h4>
+      <div class="hours-row"><span class="day">Monday – Friday</span><span class="time">8:00 AM – 9:00 PM</span></div>
+      <div class="hours-row"><span class="day">Saturday</span><span class="time">9:00 AM – 7:00 PM</span></div>
+      <div class="hours-row"><span class="day">Sunday</span><span class="time">11:00 AM – 5:00 PM</span></div>
+      <div class="hours-row"><span class="day">Public Holidays</span><span class="time" style="color:var(--muted)">Closed</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: FORMS -->
+  <div class="form-panel">
+    <div class="form-tabs">
+      <button class="tab-btn active" data-tab="general">General</button>
+      <button class="tab-btn" data-tab="support">Support</button>
+      <button class="tab-btn" data-tab="review">Review</button>
+      <button class="tab-btn" data-tab="wholesale">Wholesale</button>
+    </div>
+
+    <!-- GENERAL CONTACT FORM -->
+    <div class="tab-content active" id="tab-general">
+      <h3 style="font-family:var(--heading);font-size:1.6rem;letter-spacing:.08em;margin-bottom:1.5rem">Send Us a Message</h3>
+      <form id="generalForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input class="form-input" type="text" name="firstName" placeholder="John" required />
+            <span class="error-msg">First name is required</span>
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input class="form-input" type="text" name="lastName" placeholder="Doe" required />
+            <span class="error-msg">Last name is required</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span class="req">*</span></label>
+          <input class="form-input" type="email" name="email" placeholder="john@example.com" required />
+          <span class="error-msg">Valid email is required</span>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input class="form-input" type="tel" name="phone" placeholder="+1 (555) 000-0000" />
+        </div>
+        <div class="form-group">
+          <label>Subject <span class="req">*</span></label>
+          <select class="form-select" name="subject" required>
+            <option value="">Select a subject…</option>
+            <option>Product Inquiry</option>
+            <option>Order Status</option>
+            <option>Returns & Refunds</option>
+            <option>Warranty Claim</option>
+            <option>Career Inquiry</option>
+            <option>Other</option>
+          </select>
+          <span class="error-msg">Please select a subject</span>
+        </div>
+        <div class="form-group">
+          <label>How did you hear about us?</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" name="source" id="src-search" value="search" /><label for="src-search">Search</label></div>
+            <div class="radio-pill"><input type="radio" name="source" id="src-social" value="social" /><label for="src-social">Social Media</label></div>
+            <div class="radio-pill"><input type="radio" name="source" id="src-friend" value="friend" /><label for="src-friend">Friend</label></div>
+            <div class="radio-pill"><input type="radio" name="source" id="src-ad" value="ad" /><label for="src-ad">Ad</label></div>
+            <div class="radio-pill"><input type="radio" name="source" id="src-other" value="other" /><label for="src-other">Other</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Message <span class="req">*</span></label>
+          <textarea class="form-textarea" name="message" id="generalMsg" placeholder="Write your message here…" maxlength="500" required></textarea>
+          <div class="char-count"><span id="generalMsgCount">0</span>/500</div>
+          <span class="error-msg">Message is required</span>
+        </div>
+        <div class="form-group">
+          <label class="check-pill" style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.82rem;color:var(--muted)">
+            <input type="checkbox" name="newsletter" style="appearance:none;width:15px;height:15px;border:1px solid var(--border);background:var(--bg);cursor:pointer;flex-shrink:0;transition:background .2s,border-color .2s" id="nlCheck" />
+            Subscribe to our newsletter for deals and updates
+          </label>
+        </div>
+        <button type="submit" class="btn-submit">Send Message →</button>
+      </form>
+    </div>
+
+    <!-- SUPPORT FORM -->
+    <div class="tab-content" id="tab-support">
+      <h3 style="font-family:var(--heading);font-size:1.6rem;letter-spacing:.08em;margin-bottom:1.5rem">Technical Support</h3>
+      <form id="supportForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input class="form-input" type="text" name="name" placeholder="Your name" required />
+            <span class="error-msg">Name is required</span>
+          </div>
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input class="form-input" type="email" name="email" placeholder="your@email.com" required />
+            <span class="error-msg">Email is required</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Order Number <span class="req">*</span></label>
+          <input class="form-input" type="text" name="orderNo" placeholder="PTQ-XXXXXXXX" required />
+          <span class="error-msg">Order number is required</span>
+        </div>
+        <div class="form-group">
+          <label>Product Name <span class="req">*</span></label>
+          <input class="form-input" type="text" name="product" placeholder="e.g. iPhone 17 Pro Max" required />
+          <span class="error-msg">Product name is required</span>
+        </div>
+        <div class="form-group">
+          <label>Issue Type <span class="req">*</span></label>
+          <select class="form-select" name="issueType" required>
+            <option value="">Select issue type…</option>
+            <option>Device Not Turning On</option>
+            <option>Battery Issues</option>
+            <option>Screen Damage</option>
+            <option>Software Problem</option>
+            <option>Connectivity Issue</option>
+            <option>Wrong Item Received</option>
+            <option>Item Not Arrived</option>
+            <option>Other</option>
+          </select>
+          <span class="error-msg">Please select an issue type</span>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" name="priority" id="p-low" value="low" /><label for="p-low">Low</label></div>
+            <div class="radio-pill"><input type="radio" name="priority" id="p-med" value="medium" checked /><label for="p-med">Medium</label></div>
+            <div class="radio-pill"><input type="radio" name="priority" id="p-high" value="high" /><label for="p-high">High</label></div>
+            <div class="radio-pill"><input type="radio" name="priority" id="p-crit" value="critical" /><label for="p-crit">Critical</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Describe the Issue <span class="req">*</span></label>
+          <textarea class="form-textarea" name="issue" placeholder="Describe the problem in detail. Include when it started, what steps you've already tried, and any error messages." maxlength="800" required></textarea>
+          <span class="error-msg">Issue description is required</span>
+        </div>
+        <div class="form-group">
+          <label>Attach Screenshot / Photo</label>
+          <div class="file-upload" id="fileUpload">
+            <input type="file" accept="image/*,.pdf" id="fileInput" />
+            <div class="file-upload-icon">📎</div>
+            <div class="file-upload-text">Drag & drop or <span>click to browse</span></div>
+            <div class="file-upload-text" style="margin-top:.2rem;font-size:.72rem">PNG, JPG, PDF up to 10MB</div>
+            <div class="file-name" id="fileName"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Submit Support Ticket →</button>
+      </form>
+    </div>
+
+    <!-- REVIEW FORM -->
+    <div class="tab-content" id="tab-review">
+      <h3 style="font-family:var(--heading);font-size:1.6rem;letter-spacing:.08em;margin-bottom:1.5rem">Write a Review</h3>
+      <form id="reviewForm" novalidate>
+        <div class="form-group">
+          <label>Your Name <span class="req">*</span></label>
+          <input class="form-input" type="text" name="reviewer" placeholder="Display name" required />
+          <span class="error-msg">Name is required</span>
+        </div>
+        <div class="form-group">
+          <label>Product Reviewed <span class="req">*</span></label>
+          <select class="form-select" name="reviewProduct" required>
+            <option value="">Select a product…</option>
+            <option>Samsung Galaxy S25 Ultra</option>
+            <option>Apple MacBook Pro 14"</option>
+            <option>Sony WH-1000XM6</option>
+            <option>Apple Watch Ultra 3</option>
+            <option>iPhone 17 Pro Max</option>
+            <option>Dell XPS 15 OLED</option>
+            <option>PlayStation PS5 Pro</option>
+            <option>Sony Alpha A7 V</option>
+            <option>Other</option>
+          </select>
+          <span class="error-msg">Please select a product</span>
+        </div>
+        <div class="form-group">
+          <label>Overall Rating <span class="req">*</span></label>
+          <div class="star-rating" id="starRating">
+            <input type="radio" name="rating" id="s5" value="5" /><label for="s5">★</label>
+            <input type="radio" name="rating" id="s4" value="4" /><label for="s4">★</label>
+            <input type="radio" name="rating" id="s3" value="3" /><label for="s3">★</label>
+            <input type="radio" name="rating" id="s2" value="2" /><label for="s2">★</label>
+            <input type="radio" name="rating" id="s1" value="1" /><label for="s1">★</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>What do you rate most? (select all that apply)</label>
+          <div class="check-group">
+            <div class="check-pill"><input type="checkbox" name="aspect" id="asp-design" value="design" /><label for="asp-design">Design</label></div>
+            <div class="check-pill"><input type="checkbox" name="aspect" id="asp-perf" value="performance" /><label for="asp-perf">Performance</label></div>
+            <div class="check-pill"><input type="checkbox" name="aspect" id="asp-value" value="value" /><label for="asp-value">Value</label></div>
+            <div class="check-pill"><input type="checkbox" name="aspect" id="asp-bat" value="battery" /><label for="asp-bat">Battery</label></div>
+            <div class="check-pill"><input type="checkbox" name="aspect" id="asp-cam" value="camera" /><label for="asp-cam">Camera</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Value for Money</label>
+          <input type="range" class="range-slider" name="valueSlider" min="1" max="10" value="7" id="valueSlider" />
+          <div class="range-labels">
+            <span>Poor</span>
+            <span>Rating: <span class="range-val" id="sliderVal">7</span>/10</span>
+            <span>Excellent</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Review Title <span class="req">*</span></label>
+          <input class="form-input" type="text" name="reviewTitle" placeholder="Summarize your experience" required />
+          <span class="error-msg">Review title is required</span>
+        </div>
+        <div class="form-group">
+          <label>Full Review <span class="req">*</span></label>
+          <textarea class="form-textarea" name="review" id="reviewText" placeholder="Share the details of your experience. What did you love? What could be better?" maxlength="600" required></textarea>
+          <div class="char-count"><span id="reviewCount">0</span>/600</div>
+          <span class="error-msg">Please write a review</span>
+        </div>
+        <div class="form-group">
+          <label>Would you recommend this product?</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" name="recommend" id="rec-yes" value="yes" /><label for="rec-yes">👍 Yes</label></div>
+            <div class="radio-pill"><input type="radio" name="recommend" id="rec-no" value="no" /><label for="rec-no">👎 No</label></div>
+            <div class="radio-pill"><input type="radio" name="recommend" id="rec-maybe" value="maybe" /><label for="rec-maybe">🤔 Maybe</label></div>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Submit Review →</button>
+      </form>
+    </div>
+
+    <!-- WHOLESALE FORM -->
+    <div class="tab-content" id="tab-wholesale">
+      <h3 style="font-family:var(--heading);font-size:1.6rem;letter-spacing:.08em;margin-bottom:.4rem">Wholesale Inquiry</h3>
+      <p style="color:var(--muted);font-size:.85rem;line-height:1.6;margin-bottom:1.5rem">Interested in bulk purchasing or becoming an authorized reseller? Fill out the form and our B2B team will be in touch within 48 hours.</p>
+      <form id="wholesaleForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Contact Name <span class="req">*</span></label>
+            <input class="form-input" type="text" name="wsName" placeholder="Full name" required />
+            <span class="error-msg">Name is required</span>
+          </div>
+          <div class="form-group">
+            <label>Job Title</label>
+            <input class="form-input" type="text" name="wsTitle" placeholder="e.g. Procurement Manager" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Company Name <span class="req">*</span></label>
+          <input class="form-input" type="text" name="wsCompany" placeholder="Your company name" required />
+          <span class="error-msg">Company name is required</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Business Email <span class="req">*</span></label>
+            <input class="form-input" type="email" name="wsEmail" placeholder="you@company.com" required />
+            <span class="error-msg">Email is required</span>
+          </div>
+          <div class="form-group">
+            <label>Phone <span class="req">*</span></label>
+            <input class="form-input" type="tel" name="wsPhone" placeholder="+1 (555) 000-0000" required />
+            <span class="error-msg">Phone is required</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Country / Region <span class="req">*</span></label>
+          <select class="form-select" name="wsCountry" required>
+            <option value="">Select your country…</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Canada</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Japan</option>
+            <option>Singapore</option>
+            <option>Australia</option>
+            <option>Other</option>
+          </select>
+          <span class="error-msg">Country is required</span>
+        </div>
+        <div class="form-group">
+          <label>Business Type</label>
+          <div class="radio-group">
+            <div class="radio-pill"><input type="radio" name="wsType" id="wt-retail" value="retail" /><label for="wt-retail">Retailer</label></div>
+            <div class="radio-pill"><input type="radio" name="wsType" id="wt-distrib" value="distributor" /><label for="wt-distrib">Distributor</label></div>
+            <div class="radio-pill"><input type="radio" name="wsType" id="wt-corp" value="corporate" /><label for="wt-corp">Corporate</label></div>
+            <div class="radio-pill"><input type="radio" name="wsType" id="wt-edu" value="education" /><label for="wt-edu">Education</label></div>
+            <div class="radio-pill"><input type="radio" name="wsType" id="wt-govt" value="government" /><label for="wt-govt">Government</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Estimated Monthly Order Volume</label>
+          <select class="form-select" name="wsVolume">
+            <option value="">Select range…</option>
+            <option>$5,000 – $25,000</option>
+            <option>$25,000 – $100,000</option>
+            <option>$100,000 – $500,000</option>
+            <option>$500,000+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Categories of Interest</label>
+          <div class="check-group">
+            <div class="check-pill"><input type="checkbox" name="wsCat" id="wc-phones" value="phones" /><label for="wc-phones">Phones</label></div>
+            <div class="check-pill"><input type="checkbox" name="wsCat" id="wc-laptops" value="laptops" /><label for="wc-laptops">Laptops</label></div>
+            <div class="check-pill"><input type="checkbox" name="wsCat" id="wc-audio" value="audio" /><label for="wc-audio">Audio</label></div>
+            <div class="check-pill"><input type="checkbox" name="wsCat" id="wc-gaming" value="gaming" /><label for="wc-gaming">Gaming</label></div>
+            <div class="check-pill"><input type="checkbox" name="wsCat" id="wc-wearables" value="wearables" /><label for="wc-wearables">Wearables</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea class="form-textarea" name="wsNotes" placeholder="Any specific product requirements, delivery schedules, or other details…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="check-pill" style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.82rem;color:var(--muted)">
+            <input type="checkbox" name="wsTerms" id="wsTerms" style="appearance:none;width:15px;height:15px;border:1px solid var(--border);background:var(--bg);cursor:pointer;flex-shrink:0" required />
+            I agree to Pateq's wholesale terms and privacy policy <span class="req">*</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-submit">Submit Inquiry →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="map-section">
+  <div class="map-box">
+    <div class="map-pin">📍</div>
+    <div class="map-label">PATEQ HQ — SAN FRANCISCO</div>
+    <div class="map-sub">100 Tech Plaza, SoMa District, San Francisco, CA 94103</div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="section-label" style="margin-bottom:.5rem">Quick answers</div>
+  <h2 style="font-family:var(--heading);font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:.04em;margin-bottom:2rem">Frequently Asked Questions</h2>
+  <div class="faq-grid">
+    <div class="faq-item">
+      <div class="faq-q">How long does delivery take? <span class="toggle">+</span></div>
+      <div class="faq-a">Standard delivery takes 3–5 business days. Express (1–2 days) and same-day options are available for orders over $99 in eligible areas.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Are all products genuine? <span class="toggle">+</span></div>
+      <div class="faq-a">Absolutely. Every item is sourced directly from manufacturers or authorized distributors and passes our authenticity verification process before listing.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What's your return policy? <span class="toggle">+</span></div>
+      <div class="faq-a">We offer hassle-free 30-day returns on all items. Simply initiate a return from your account dashboard and drop the package at any partner location.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you offer warranty on products? <span class="toggle">+</span></div>
+      <div class="faq-a">All products come with the manufacturer's standard warranty. Our optional Pateq Care plan extends coverage up to 3 years with priority support.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I track my order? <span class="toggle">+</span></div>
+      <div class="faq-a">Yes! Once your order ships, you'll receive a tracking link via email and SMS. Real-time tracking is also available from your Pateq account.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you ship internationally? <span class="toggle">+</span></div>
+      <div class="faq-a">We ship to 48+ countries. International delivery typically takes 5–10 business days. Customs fees may apply based on your country's regulations.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <a href="index.html" class="footer-logo">PATEQ</a>
+    <span>© 2025 Pateq Electronics. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Toast
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = '✓ ' + msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // Validate & submit
+  function validateForm(form) {
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(field => {
+      const group = field.closest('.form-group');
+      const err = group ? group.querySelector('.error-msg') : null;
+      if (!field.value.trim()) {
+        field.classList.add('error');
+        if (err) err.classList.add('visible');
+        valid = false;
+      } else {
+        field.classList.remove('error');
+        if (err) err.classList.remove('visible');
+      }
+    });
+    return valid;
+  }
+
+  ['generalForm','supportForm','reviewForm','wholesaleForm'].forEach(id => {
+    const form = document.getElementById(id);
+    if (form) form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (validateForm(form)) { form.reset(); showToast('Message sent successfully!'); }
+    });
+  });
+
+  // Char counters
+  function bindCounter(textareaId, countId) {
+    const ta = document.getElementById(textareaId);
+    const ct = document.getElementById(countId);
+    if (ta && ct) ta.addEventListener('input', () => ct.textContent = ta.value.length);
+  }
+  bindCounter('generalMsg', 'generalMsgCount');
+  bindCounter('reviewText', 'reviewCount');
+
+  // Range slider
+  const slider = document.getElementById('valueSlider');
+  const sliderVal = document.getElementById('sliderVal');
+  if (slider) slider.addEventListener('input', () => sliderVal.textContent = slider.value);
+
+  // File upload
+  const fileInput = document.getElementById('fileInput');
+  const fileName = document.getElementById('fileName');
+  if (fileInput) fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) { fileName.textContent = '📎 ' + fileInput.files[0].name; fileName.style.display = 'block'; }
+  });
+
+  // Checkbox styling
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      this.style.background = this.checked ? 'var(--accent)' : 'var(--bg)';
+      this.style.borderColor = this.checked ? 'var(--accent)' : 'var(--border)';
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
