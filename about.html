@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us – Pateq Electronics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080a0e; --surface: #0f1218; --surface2: #161b24;
+      --border: #1e2530; --accent: #e8ff47; --accent2: #47c8ff;
+      --text: #e8edf5; --muted: #5a6478;
+      --heading: 'JetBrains Mono', cursive; --body: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 68px; background: rgba(8,10,14,.85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: var(--heading); font-size: 2rem; letter-spacing: .12em; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a { font-size: .85rem; font-weight: 500; letter-spacing: .08em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-cta { background: var(--accent); color: #080a0e; font-family: var(--body); font-weight: 600; font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; padding: .55rem 1.4rem; border: none; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .nav-cta:hover { background: #d4e83a; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); transition: all .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 1.5rem 5%; gap: 1.2rem; z-index: 99; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: .95rem; font-weight: 500; letter-spacing: .06em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color .2s; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    .about-hero {
+      padding: 130px 5% 5rem; min-height: 60vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .about-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 85% 40%, rgba(232,255,71,.06), transparent 60%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(72,200,255,.04), transparent 60%);
+    }
+    .about-hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(30,37,48,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(30,37,48,.3) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 30%, transparent 100%);
+    }
+    .about-hero-content { position: relative; z-index: 2; max-width: 800px; }
+    .about-eyebrow { font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem; display: flex; align-items: center; gap: .7rem; }
+    .about-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent2); }
+    .about-hero h1 { font-family: var(--heading); font-size: clamp(3rem, 8vw, 7rem); line-height: .92; letter-spacing: .03em; }
+    .about-hero h1 em { color: var(--accent); font-style: normal; }
+    .about-hero p { color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin-top: 1.5rem; max-width: 560px; }
+
+    section { padding: 5.5rem 5%; }
+    .section-label { font-size: .72rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+    .section-title { font-family: var(--heading); font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1; letter-spacing: .04em; margin-bottom: 1rem; }
+
+    .mission { background: var(--bg); }
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .mission-text p { color: var(--muted); line-height: 1.75; margin-bottom: 1.2rem; font-size: .97rem; }
+    .mission-quote {
+      border-left: 3px solid var(--accent); padding: 1.2rem 1.8rem;
+      background: var(--surface2); margin: 2rem 0;
+      font-size: 1.12rem; font-style: italic; line-height: 1.6; color: var(--text);
+    }
+    .mission-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+    }
+    .mission-stat { background: var(--surface); padding: 2.5rem 2rem; }
+    .mission-stat .num { font-family: var(--heading); font-size: 3.5rem; color: var(--accent); line-height: 1; }
+    .mission-stat .lbl { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: .4rem; }
+    .mission-stat .desc { font-size: .82rem; color: var(--muted); margin-top: .5rem; line-height: 1.5; }
+
+    .timeline-section { background: var(--surface); }
+    .timeline { position: relative; max-width: 700px; margin: 0 auto; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .tl-item { padding: 0 0 3rem 2.5rem; position: relative; }
+    .tl-item::before { content: ''; position: absolute; left: -5px; top: 6px; width: 11px; height: 11px; background: var(--accent); border-radius: 50%; }
+    .tl-year { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+    .tl-ttl { font-weight: 600; font-size: 1.05rem; margin-bottom: .4rem; }
+    .tl-txt { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .team-card { background: var(--surface); padding: 2rem 1.8rem; position: relative; overflow: hidden; transition: background .2s; }
+    .team-card:hover { background: var(--surface2); }
+    .team-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform .3s; }
+    .team-card:hover::after { transform: scaleX(1); }
+    .team-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.2rem; }
+    .team-name { font-weight: 700; font-size: 1rem; margin-bottom: .2rem; }
+    .team-role { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent2); margin-bottom: .6rem; }
+    .team-bio { font-size: .82rem; color: var(--muted); line-height: 1.55; }
+
+    .values { background: var(--bg); }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .value-card { border: 1px solid var(--border); padding: 2rem; background: var(--surface); position: relative; }
+    .value-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .value-ttl { font-weight: 700; font-size: 1rem; margin-bottom: .5rem; }
+    .value-txt { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+    .join { background: var(--surface); text-align: center; }
+    .join-box { max-width: 680px; margin: 0 auto; }
+    .join-box .section-title { margin-bottom: 1.2rem; }
+    .join-box p { color: var(--muted); line-height: 1.7; margin-bottom: 2rem; }
+    .btn-primary { background: var(--accent); color: #080a0e; font-weight: 700; font-size: .88rem; letter-spacing: .1em; text-transform: uppercase; padding: .85rem 2rem; text-decoration: none; display: inline-block; transition: background .2s, transform .15s; }
+    .btn-primary:hover { background: #d4e83a; transform: translateY(-2px); }
+    .btn-outline { border: 1px solid var(--border); color: var(--text); font-weight: 500; font-size: .88rem; letter-spacing: .1em; text-transform: uppercase; padding: .85rem 2rem; text-decoration: none; display: inline-block; margin-left: 1rem; transition: border-color .2s, color .2s, transform .15s; }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 5% 1.5rem; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted); flex-wrap: wrap; gap: .8rem; }
+    .footer-logo { font-family: var(--heading); font-size: 1.6rem; color: var(--accent); text-decoration: none; }
+    .footer-links a { color: var(--muted); text-decoration: none; margin-left: 1.2rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 900px) { .mission-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    @media (max-width: 640px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .btn-outline { margin-left: 0; margin-top: .8rem; } section { padding: 3.5rem 5%; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">PATEQ</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="products.html" class="nav-cta">Shop Now</a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="about-hero-grid"></div>
+  <div class="about-hero-content">
+    <div class="about-eyebrow">Our Story</div>
+    <h1>Powering the<br><em>World's Tech</em><br>Pioneers.</h1>
+    <p>Pateq was built on a simple belief: everyone deserves access to the best technology — without compromise, without confusion, without the runaround.</p>
+  </div>
+</div>
+
+<section class="mission">
+  <div class="mission-grid">
+    <div class="mission-text">
+      <div class="section-label">Who we are</div>
+      <h2 class="section-title">Tech, Simplified.<br>Performance, Amplified.</h2>
+      <p>Founded in 2018 in the heart of Silicon Valley, Pateq started as a small team of engineers and design enthusiasts who were frustrated with the state of electronics retail — too much noise, too little substance.</p>
+      <p>We set out to change that. Today, Pateq is a global destination for discerning tech buyers who value precision, honesty, and genuine expertise over flashy marketing.</p>
+      <blockquote class="mission-quote">
+        "We don't just sell devices. We connect people to the tools that expand what's possible in their lives."
+        <br><strong style="font-style:normal;font-size:.85rem;color:var(--accent);display:block;margin-top:.7rem;">— Kaito Patel, Founder & CEO</strong>
+      </blockquote>
+      <p>From flagship smartphones to professional-grade audio, every product on Pateq is hand-selected, authenticity-verified, and backed by our world-class support team.</p>
+    </div>
+    <div class="mission-visual">
+      <div class="mission-stat">
+        <div class="num">7+</div>
+        <div class="lbl">Years in Business</div>
+        <div class="desc">Serving tech enthusiasts since 2018</div>
+      </div>
+      <div class="mission-stat">
+        <div class="num">50+</div>
+        <div class="lbl">Brands</div>
+        <div class="desc">Authorized distributor for top manufacturers</div>
+      </div>
+      <div class="mission-stat">
+        <div class="num">2M+</div>
+        <div class="lbl">Happy Customers</div>
+        <div class="desc">Across 48 countries worldwide</div>
+      </div>
+      <div class="mission-stat">
+        <div class="num">98%</div>
+        <div class="lbl">Satisfaction Rate</div>
+        <div class="desc">Based on verified post-purchase surveys</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-label">Our journey</div>
+    <h2 class="section-title" style="margin-bottom:3rem">How We Got Here</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2018</div>
+        <div class="tl-ttl">Founded in San Francisco</div>
+        <div class="tl-txt">Kaito Patel and three co-founders launch Pateq as an online-only electronics retailer, focusing on quality over quantity with a curated catalog of 200 products.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2019</div>
+        <div class="tl-ttl">First Flagship Store Opens</div>
+        <div class="tl-txt">Our first physical store opens in SF's SoMa district, featuring an immersive demo space where customers can try before they buy.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-ttl">International Expansion</div>
+        <div class="tl-txt">Pateq expands to Europe and Asia-Pacific, opening distribution hubs in London, Tokyo, and Singapore to serve global demand.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2023</div>
+        <div class="tl-ttl">Pateq Care Program Launches</div>
+        <div class="tl-txt">We introduce our industry-leading extended warranty and premium support program, covering every product we sell for up to 3 years.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-ttl">2 Million Customers Milestone</div>
+        <div class="tl-txt">We hit 2 million satisfied customers worldwide and launch our redesigned platform — faster, smarter, and more personalized than ever.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg)">
+  <div class="section-label">The people behind Pateq</div>
+  <h2 class="section-title">Meet the Team</h2>
+  <p style="color:var(--muted);margin-bottom:2.5rem;max-width:480px;line-height:1.7;font-size:.95rem">A diverse group of engineers, designers, and tech obsessives working to make great technology accessible to everyone.</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">👨‍💼</div>
+      <div class="team-name">Kaito Patel</div>
+      <div class="team-role">Founder & CEO</div>
+      <div class="team-bio">Former Apple engineer with 15 years in consumer electronics. Kaito's vision drives Pateq's product philosophy.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👩‍💻</div>
+      <div class="team-name">Sara Novak</div>
+      <div class="team-role">Chief Technology Officer</div>
+      <div class="team-bio">MIT alum and ex-Google engineer. Sara leads our platform engineering and AI personalization systems.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">🧑‍🎨</div>
+      <div class="team-name">Marcus Lee</div>
+      <div class="team-role">Head of Design</div>
+      <div class="team-bio">Award-winning UX designer previously at Figma and Adobe. Oversees every pixel of the Pateq experience.</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">👩‍🔬</div>
+      <div class="team-name">Priya Sharma</div>
+      <div class="team-role">VP of Partnerships</div>
+      <div class="team-bio">Manages Pateq's relationships with 50+ brands globally. Built our certified distributor network from scratch.</div>
+    </div>
+  </div>
+</section>
+
+<section class="values">
+  <div class="section-label">What drives us</div>
+  <h2 class="section-title">Our Core Values</h2>
+  <div class="values-grid" style="margin-top:2.5rem">
+    <div class="value-card">
+      <div class="value-icon">🔍</div>
+      <div class="value-ttl">Radical Transparency</div>
+      <div class="value-txt">No hidden fees, no inflated specs. We tell you exactly what you're getting and why it's worth it.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">⚡</div>
+      <div class="value-ttl">Performance First</div>
+      <div class="value-txt">Every product is tested by our in-house team before it earns a spot in our catalog. Average doesn't make the cut.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🌍</div>
+      <div class="value-ttl">Sustainable Commerce</div>
+      <div class="value-txt">Carbon-neutral shipping, responsible packaging, and a trade-in program that keeps devices out of landfills.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🤝</div>
+      <div class="value-ttl">Customer Partnership</div>
+      <div class="value-txt">We don't just sell you a device. We're partners in helping you get the most out of every technology investment.</div>
+    </div>
+  </div>
+</section>
+
+<section class="join">
+  <div class="join-box">
+    <div class="section-label" style="text-align:center">Work with us</div>
+    <h2 class="section-title">Join the Pateq Team</h2>
+    <p>We're always looking for brilliant people who are obsessed with great technology and even better customer experiences. Remote-first culture. Competitive pay. Meaningful work.</p>
+    <div>
+      <a href="contact.html" class="btn-primary">View Open Roles</a>
+      <a href="contact.html" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <a href="index.html" class="footer-logo">PATEQ</a>
+    <span>© 2025 Pateq Electronics. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+</script>
+</body>
+</html>
